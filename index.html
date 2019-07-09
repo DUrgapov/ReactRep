@@ -1,0 +1,180 @@
+<head>
+    <title>fabric</title>
+    <script src="fabric.min.js"></script>
+</head>
+<body>
+    <h1 style="color: red">ФАБРИКА</h1>
+    <canvas id="canvas" width="600" height="400" style="border: 2px solid blue;"></canvas>
+    <script>
+        let canvas = new fabric.Canvas('canvas', {
+            isDrawingMode: false,
+        });
+        function colors() {
+            let red = Math.floor(Math.random() * 255);
+            let blue = Math.floor(Math.random() * 255);
+            let green = Math.floor(Math.random() * 255);
+            let color = 'rgb(' + String(red) + ',' + String(blue) + ',' + String(green) + ')';
+            return color;
+        }
+
+        let vx = [];
+        let vy = [];
+        let balls = [];
+        let partNum = 5;
+        //canvas.add(ball);
+        for (let i = 0; i < partNum; i++) {
+            //console.log(colors[Math.floor(Math.random() * 6)]);
+            balls[i] = new fabric.Circle({
+                id: 'ball' + String(i),
+                selectable: false,
+                radius: 10,
+                fill: colors(),
+                top: Math.floor(Math.random() * 300 + 50),
+                left: Math.floor(Math.random() * 500 + 50),
+            });
+            vx[i] = Math.floor(Math.random() * 9 + 1);
+            vy[i] = -Math.floor(Math.random() * 9 + 1);
+            canvas.add(balls[i]);
+            canvas.renderAll();
+        }
+
+        for (let i = 0; i < partNum; i++) {
+            for (let j = 0; j < partNum; j++) {
+                if (i !== j) {
+                    let b1xcenter = balls[i].left + balls[i].radius;
+                    let b1ycenter = balls[i].top + balls[i].radius;
+                    let b2xcenter = balls[j].left + balls[j].radius;
+                    let b2ycenter = balls[j].top + balls[j].radius;
+                    let dist =
+                        (b1ycenter - b2ycenter) * (b1ycenter - b2ycenter) +
+                        (b1xcenter - b2xcenter) * (b1xcenter - b2xcenter);
+                    let r = Math.pow(balls[i].radius + balls[j].radius, 2);
+                    {
+                        if (dist <= r) {
+                            canvas.remove(balls[i]);
+                            balls[i] = new fabric.Circle({
+                                id: 'ball' + String(i),
+                                selectable: false,
+                                radius: 10,
+                                fill: colors(),
+                                top: Math.floor(Math.random() * 300 + 50),
+                                left: Math.floor(Math.random() * 500 + 50),
+                            });
+                            vx[i] = Math.floor(Math.random() * 9 + 1);
+                            vy[i] = -Math.floor(Math.random() * 9 + 1);
+                            canvas.add(balls[i]);
+                            canvas.renderAll();
+                        }
+                    }
+                }
+            }
+        }
+
+        canvas.on('mouse:down', function(options) {
+            setInterval(function() {
+                for (let i = 0; i < balls.length; i++) {
+                    for (let j = 0; j < balls.length; j++) {
+                        if (i !== j) {
+                            let b1center = {
+                                x: balls[i].left + balls[i].radius,
+                                y: balls[i].top + balls[i].radius,
+                            };
+                            let b2center = {
+                                x: balls[j].left + balls[j].radius,
+                                y: balls[j].top + balls[j].radius,
+                            };
+                            let dist =
+                                (b1center.y - b2center.y) * (b1center.y - b2center.y) +
+                                (b1center.x - b2center.x) * (b1center.x - b2center.x);
+
+                            let r = (balls[i].radius + balls[j].radius) * (balls[i].radius + balls[j].radius);
+                            if (Math.abs(dist) <= r) {
+                                /*
+                                vx[i] = -vx[i];
+                                vx[j] = -vx[j];
+                                vy[i] = -vy[i];
+                                vy[j] = -vy[j];*/
+                                // vx[i] = Math.cos(Math.atan(vy[j] / vx[j])) * vx[i];
+                                // vx[j] = Math.cos(Math.atan(vy[i] / vx[i])) * vx[j];
+                                // vy[i] = Math.sin(Math.atan(vy[j] / vx[j])) * vy[i];
+                                // vy[j] = Math.sin(Math.atan(vy[i] / vx[i])) * vy[j];
+                                /* аннигиляция
+                                let prob = Math.random();
+                                if (prob > 1 / 1000) {
+                                    vx[i] = -vx[i];
+                                    vx[j] = -vx[j];
+                                    vy[i] = -vy[i];
+                                    vy[j] = -vy[j];
+                                } else {
+                                    canvas.remove(balls[i]);
+                                    canvas.remove(balls[j]);
+                                }
+                                */
+                            }
+                            if (balls[i].top >= 400 - 2 * balls[i].radius) {
+                                vy[i] = -vy[i];
+                            }
+                            if (balls[i].top <= 0) {
+                                vy[i] = -vy[i];
+                            }
+                            if (balls[i].left >= 600 - 2 * balls[i].radius) {
+                                vx[i] = -vx[i];
+                            }
+                            if (balls[i].left <= 0) {
+                                vx[i] = -vx[i];
+                            }
+                            balls[i].set('top', balls[i].top + vy[i]);
+                            balls[i].set('left', balls[i].left + vx[i]);
+                            //ball2.set('top', ball2.top + v2.y);
+                            //ball2.set('left', ball2.left + v2.x);
+                            canvas.renderAll();
+                        }
+                    }
+                }
+            }, 1000 / 60);
+        });
+    </script>
+    <button id="add">Добавить частицу</button>
+    <button id="remove">Удалить частицу</button>
+    <button id="grow">Увеличить размер частиц</button>
+    <button id="less">Уменьшить размер частиц</button>
+    <script>
+        let butAdd = document.getElementById('add');
+        butAdd.addEventListener('click', function() {
+            let newBall = new fabric.Circle({
+                id: 'ball' + String(balls.length),
+                selectable: false,
+                radius: balls[1].radius,
+                fill: colors(),
+                top: Math.floor(Math.random() * 300 + 50),
+                left: Math.floor(Math.random() * 500 + 50),
+            });
+            balls.push(newBall);
+            vx.push(Math.floor(Math.random() * 9 + 1));
+            vy.push(-Math.floor(Math.random() * 9 + 1));
+            canvas.add(balls[balls.length - 1]);
+            canvas.renderAll();
+        });
+        let butRem = document.getElementById('remove');
+        butRem.addEventListener('click', function() {
+            if (balls.length > 2) {
+                canvas.remove(balls[balls.length - 1]);
+                balls.length--;
+            }
+        });
+        let butG = document.getElementById('grow');
+        butG.addEventListener('click', function() {
+            balls.forEach(function(item) {
+                item.set('radius', item.radius + 1);
+                canvas.renderAll();
+            });
+        });
+        let butL = document.getElementById('less');
+        butL.addEventListener('click', function() {
+            balls.forEach(function(item) {
+                item.set('radius', item.radius - 1);
+                canvas.renderAll();
+            });
+        });
+    </script>
+</body>
