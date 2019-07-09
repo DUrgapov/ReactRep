@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Солнечная система</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="hl"></div>
+        <div class="vl"></div>
+        <header>СОЛНЕЧНАЯ СИСТЕМА. ИНТЕРАКТИВНАЯ КАРТА</header>
+        <img class="solarSystem" src="solarSystem.jpg" usemap="#Navigation" />
+        <p>
+            <map id="Navigation" name="Navigation">
+                <area id="Sun" shape="rect" coords="0, 0, 186, 868" href="Sun.html" data-title="Солнце" />
+                <area id="Mercury" shape="circle" coords="230, 525, 20" href="Mercury.html" data-title="Меркурий" />
+                <area id="Venus" shape="circle" coords="358, 470, 32" href="Venus.html" data-title="Венера" />
+                <area id="Earth" shape="circle" coords="486, 400, 35" href="Earth.html" data-title="Земля" />
+            </map>
+        </p>
+    </body>
+</html>

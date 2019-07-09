@@ -1,0 +1,77 @@
+body {
+    background-color: black;
+}
+img {
+    z-index: 0;
+}
+header {
+    color: yellow;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    height: 40%;
+    width: 100%;
+}
+header.Mercury {
+    color: brown;
+    background: url('http://www.kartinki.me/pic/201205/1440x900/kartinki.me-3991.jpg');
+}
+header.Venus {
+    color: bisque;
+    background: url('http://www.kartinki.me/pic/201205/1440x900/kartinki.me-3991.jpg');
+}
+header.Earth {
+    color: skyblue;
+    background: url('https://get.pxhere.com/photo/cloud-sky-atmosphere-weather-cumulus-thunderstorm-afterglow-meteorological-phenomenon-1406385.jpg');
+}
+header.Mars {
+    color: red;
+    background: url('http://www.kartinki.me/pic/201205/1440x900/kartinki.me-3991.jpg');
+}
+header.Sun {
+    background: url('http://www.kartinki.me/pic/201205/1440x900/kartinki.me-3991.jpg');
+}
+.solarSystem {
+    width: 100%;
+    height: 60%;
+}
+map {
+    z-index: 3;
+}
+area {
+    z-index: 3;
+    border: 0px solid black;
+}
+
+area:hover {
+    z-index: 3;
+    border: 2px solid brown;
+    background-color: bisque;
+}
+area::after {
+    content: attr(data-title);
+}
+area:hover::after {
+    content: attr(data-title);
+    position: absolute; /* Абсолютное позиционирование */
+    width: 10%;
+    left: 14%;
+    top: 12%; /* Положение подсказки */
+    z-index: 1; /* Отображаем подсказку поверх других элементов */
+    background: black(255, 255, 230, 0.9); /* Полупрозрачный цвет фона */
+    font-family: Arial, sans-serif; /* Гарнитура шрифта */
+    font-size: 30px; /* Размер текста подсказки */
+    padding: 5px 10px; /* Поля */
+    border: 0px solid #333; /* Параметры рамки */
+    color: royalblue;
+    text-align: center;
+}
+.hl {
+    position: absolute;
+    left: 14%;
+    top: 17%;
+    z-index: 1;
+    border: 1px solid royalblue;
+    width: 11%;
+    height: 0px;
+}
